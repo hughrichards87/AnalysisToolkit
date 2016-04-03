@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Analysis", "Analysis\Analys
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Process", "Process\Process.csproj", "{CD551883-2DD9-4522-95D2-852F5A0C716F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BackEnd", "BackEnd", "{4D0570F8-A6D4-4922-B547-3E7730243D84}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E76A39DD-3667-4BC0-B4F0-0E685B51A5D8} = {4D0570F8-A6D4-4922-B547-3E7730243D84}
+		{7774342D-E760-4BAE-A985-B1E382AF9C2F} = {4D0570F8-A6D4-4922-B547-3E7730243D84}
+		{CD551883-2DD9-4522-95D2-852F5A0C716F} = {4D0570F8-A6D4-4922-B547-3E7730243D84}
 	EndGlobalSection
 EndGlobal
