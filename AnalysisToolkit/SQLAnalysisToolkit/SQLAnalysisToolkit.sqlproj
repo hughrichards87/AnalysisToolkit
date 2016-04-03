@@ -58,4 +58,27 @@
   <ItemGroup>
     <Folder Include="Properties" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Analysis\Analysis.csproj">
+      <Name>Analysis</Name>
+      <Project>{7774342d-e760-4bae-a985-b1e382af9c2f}</Project>
+      <Private>True</Private>
+      <IsModelAware>True</IsModelAware>
+      <GenerateSqlClrDdl>True</GenerateSqlClrDdl>
+    </ProjectReference>
+    <ProjectReference Include="..\Helpers\Helpers.csproj">
+      <Name>Helpers</Name>
+      <Project>{e76a39dd-3667-4bc0-b4f0-0e685b51a5d8}</Project>
+      <Private>True</Private>
+      <IsModelAware>True</IsModelAware>
+      <GenerateSqlClrDdl>True</GenerateSqlClrDdl>
+    </ProjectReference>
+    <ProjectReference Include="..\Process\Process.csproj">
+      <Name>Process</Name>
+      <Project>{cd551883-2dd9-4522-95d2-852f5a0c716f}</Project>
+      <Private>True</Private>
+      <IsModelAware>True</IsModelAware>
+      <GenerateSqlClrDdl>True</GenerateSqlClrDdl>
+    </ProjectReference>
+  </ItemGroup>
 </Project>
