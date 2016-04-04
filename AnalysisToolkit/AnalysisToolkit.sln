@@ -7,15 +7,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BackEnd", "BackEnd", "{4D05
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FrontEnd", "FrontEnd", "{CAA5817A-58F6-4EF7-AA2E-82A1D79D9565}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Analysis", "BackEnd\Analysis\Analysis.csproj", "{7774342D-E760-4BAE-A985-B1E382AF9C2F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnalysisToolkit.BackEnd.Analysis", "BackEnd\Analysis\AnalysisToolkit.BackEnd.Analysis.csproj", "{7774342D-E760-4BAE-A985-B1E382AF9C2F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Helpers", "BackEnd\Helpers\Helpers.csproj", "{E76A39DD-3667-4BC0-B4F0-0E685B51A5D8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnalysisToolkit.BackEnd.Helpers", "BackEnd\Helpers\AnalysisToolkit.BackEnd.Helpers.csproj", "{E76A39DD-3667-4BC0-B4F0-0E685B51A5D8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Process", "BackEnd\Process\Process.csproj", "{CD551883-2DD9-4522-95D2-852F5A0C716F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnalysisToolkit.BackEnd.Process", "BackEnd\Process\AnalysisToolkit.BackEnd.Process.csproj", "{CD551883-2DD9-4522-95D2-852F5A0C716F}"
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQLAnalysisToolkit", "FrontEnd\SQLAnalysisToolkit\SQLAnalysisToolkit.sqlproj", "{61EE0465-BB0C-46DC-948E-C6EE18A04346}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IO", "BackEnd\IO\IO.csproj", "{A111CFEB-0CE6-45C6-A25C-D51412B26505}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnalysisToolkit.BackEnd.IO", "BackEnd\IO\AnalysisToolkit.BackEnd.IO.csproj", "{A111CFEB-0CE6-45C6-A25C-D51412B26505}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

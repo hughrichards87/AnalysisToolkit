@@ -35,9 +35,9 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
-    <ProjectReference Include="..\Helpers\Helpers.csproj">
+    <ProjectReference Include="..\Helpers\AnalysisToolkit.BackEnd.Helpers.csproj">
       <Project>{e76a39dd-3667-4bc0-b4f0-0e685b51a5d8}</Project>
-      <Name>Helpers</Name>
+      <Name>AnalysisToolkit.BackEnd.Helpers</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
