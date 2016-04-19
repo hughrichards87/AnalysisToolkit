@@ -17,6 +17,8 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQLAnalysisToolkit", "Front
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnalysisToolkit.BackEnd.IO", "BackEnd\IO\AnalysisToolkit.BackEnd.IO.csproj", "{A111CFEB-0CE6-45C6-A25C-D51412B26505}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnalysisToolkit.FrontEnd.Application", "AnalysisToolkit.FrontEnd.Application\AnalysisToolkit.FrontEnd.Application.csproj", "{A71A23D3-EF19-48BE-9B26-778A967E70B8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{A111CFEB-0CE6-45C6-A25C-D51412B26505}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A111CFEB-0CE6-45C6-A25C-D51412B26505}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A111CFEB-0CE6-45C6-A25C-D51412B26505}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A71A23D3-EF19-48BE-9B26-778A967E70B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A71A23D3-EF19-48BE-9B26-778A967E70B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A71A23D3-EF19-48BE-9B26-778A967E70B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A71A23D3-EF19-48BE-9B26-778A967E70B8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -55,5 +61,6 @@ Global
 		{CD551883-2DD9-4522-95D2-852F5A0C716F} = {4D0570F8-A6D4-4922-B547-3E7730243D84}
 		{61EE0465-BB0C-46DC-948E-C6EE18A04346} = {CAA5817A-58F6-4EF7-AA2E-82A1D79D9565}
 		{A111CFEB-0CE6-45C6-A25C-D51412B26505} = {4D0570F8-A6D4-4922-B547-3E7730243D84}
+		{A71A23D3-EF19-48BE-9B26-778A967E70B8} = {CAA5817A-58F6-4EF7-AA2E-82A1D79D9565}
 	EndGlobalSection
 EndGlobal
