@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <Name>SQLAnalysisToolkit</Name>
+    <Name>AnalysisToolkit.FrontEnd.SQL</Name>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
     <ProjectGuid>{61ee0465-bb0c-46dc-948e-c6ee18a04346}</ProjectGuid>
@@ -57,35 +57,5 @@
   <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
   <ItemGroup>
     <Folder Include="Properties" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\BackEnd\Helpers\AnalysisToolkit.BackEnd.Portable.Helpers.csproj">
-      <Name>AnalysisToolkit.BackEnd.Portable.Helpers</Name>
-      <Project>{e76a39dd-3667-4bc0-b4f0-0e685b51a5d8}</Project>
-      <Private>True</Private>
-      <IsModelAware>True</IsModelAware>
-      <GenerateSqlClrDdl>True</GenerateSqlClrDdl>
-    </ProjectReference>
-    <ProjectReference Include="..\..\BackEnd\Process\AnalysisToolkit.BackEnd.Portable.Process.csproj">
-      <Name>AnalysisToolkit.BackEnd.Portable.Process</Name>
-      <Project>{cd551883-2dd9-4522-95d2-852f5a0c716f}</Project>
-      <Private>True</Private>
-      <IsModelAware>True</IsModelAware>
-      <GenerateSqlClrDdl>True</GenerateSqlClrDdl>
-    </ProjectReference>
-    <ProjectReference Include="..\..\BackEnd\IO\AnalysisToolkit.BackEnd.Portable.IO.csproj">
-      <Name>AnalysisToolkit.BackEnd.Portable.IO</Name>
-      <Project>{a111cfeb-0ce6-45c6-a25c-d51412b26505}</Project>
-      <Private>True</Private>
-      <IsModelAware>True</IsModelAware>
-      <GenerateSqlClrDdl>True</GenerateSqlClrDdl>
-    </ProjectReference>
-    <ProjectReference Include="..\..\BackEnd\Analysis\AnalysisToolkit.BackEnd.Portable.Analysis.csproj">
-      <Name>AnalysisToolkit.BackEnd.Portable.Analysis</Name>
-      <Project>{7774342d-e760-4bae-a985-b1e382af9c2f}</Project>
-      <Private>True</Private>
-      <IsModelAware>True</IsModelAware>
-      <GenerateSqlClrDdl>True</GenerateSqlClrDdl>
-    </ProjectReference>
   </ItemGroup>
 </Project>

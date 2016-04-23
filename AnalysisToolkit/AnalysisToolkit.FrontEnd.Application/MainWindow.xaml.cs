@@ -24,5 +24,10 @@ namespace AnalysisToolkit.FrontEnd.Application
         {
             InitializeComponent();
         }
+
+        private void button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
