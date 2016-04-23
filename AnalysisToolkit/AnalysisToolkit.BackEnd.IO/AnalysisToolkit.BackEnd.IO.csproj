@@ -5,15 +5,15 @@
     <MinimumVisualStudioVersion>11.0</MinimumVisualStudioVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{A111CFEB-0CE6-45C6-A25C-D51412B26505}</ProjectGuid>
+    <ProjectGuid>{C151A27C-EA7F-42EC-B107-5BA250844F70}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>IO</RootNamespace>
-    <AssemblyName>IO</AssemblyName>
+    <RootNamespace>AnalysisToolkit.BackEnd.IO</RootNamespace>
+    <AssemblyName>AnalysisToolkit.BackEnd.IO</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <TargetFrameworkProfile>Profile111</TargetFrameworkProfile>
+    <TargetFrameworkProfile>Profile75</TargetFrameworkProfile>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -35,10 +35,6 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
-    <ProjectReference Include="..\Helpers\AnalysisToolkit.BackEnd.Helpers.csproj">
-      <Project>{e76a39dd-3667-4bc0-b4f0-0e685b51a5d8}</Project>
-      <Name>AnalysisToolkit.BackEnd.Helpers</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />

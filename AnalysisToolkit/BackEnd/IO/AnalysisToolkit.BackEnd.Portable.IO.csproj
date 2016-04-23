@@ -2,19 +2,20 @@
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
-    <MinimumVisualStudioVersion>11.0</MinimumVisualStudioVersion>
+    <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{CD551883-2DD9-4522-95D2-852F5A0C716F}</ProjectGuid>
+    <ProjectGuid>{A111CFEB-0CE6-45C6-A25C-D51412B26505}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Process</RootNamespace>
-    <AssemblyName>Process</AssemblyName>
+    <RootNamespace>IO</RootNamespace>
+    <AssemblyName>IO</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <TargetFrameworkProfile>Profile111</TargetFrameworkProfile>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -35,26 +36,14 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
-    <ProjectReference Include="..\Analysis\AnalysisToolkit.BackEnd.Analysis.csproj">
-      <Project>{7774342d-e760-4bae-a985-b1e382af9c2f}</Project>
-      <Name>AnalysisToolkit.BackEnd.Analysis</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Helpers\AnalysisToolkit.BackEnd.Helpers.csproj">
+    <ProjectReference Include="..\Helpers\AnalysisToolkit.BackEnd.Portable.Helpers.csproj">
       <Project>{e76a39dd-3667-4bc0-b4f0-0e685b51a5d8}</Project>
-      <Name>AnalysisToolkit.BackEnd.Helpers</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\IO\AnalysisToolkit.BackEnd.IO.csproj">
-      <Project>{a111cfeb-0ce6-45c6-a25c-d51412b26505}</Project>
-      <Name>AnalysisToolkit.BackEnd.IO</Name>
+      <Name>AnalysisToolkit.BackEnd.Portable.Helpers</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Build\" />
-    <Folder Include="Clean\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
