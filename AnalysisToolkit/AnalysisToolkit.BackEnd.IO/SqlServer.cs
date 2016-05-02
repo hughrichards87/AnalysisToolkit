@@ -6,7 +6,17 @@ using System.Threading.Tasks;
 
 namespace AnalysisToolkit.BackEnd.IO
 {
-    public class Class1
+    public class SqlServer
     {
+
+        public SqlServer()
+        {
+
+        }
+
+        public ImportCharacterSeparatedValueFile()
+        {
+
+        }
     }
 }

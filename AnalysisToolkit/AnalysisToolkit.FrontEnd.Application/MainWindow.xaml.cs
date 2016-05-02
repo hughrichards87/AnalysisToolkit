@@ -20,6 +20,9 @@ namespace AnalysisToolkit.FrontEnd.Application
     /// </summary>
     public partial class MainWindow : Window
     {
+
+        Model _model;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -27,7 +30,7 @@ namespace AnalysisToolkit.FrontEnd.Application
 
         private void button_Click(object sender, RoutedEventArgs e)
         {
-
+            _model = new Model();
         }
     }
 }
