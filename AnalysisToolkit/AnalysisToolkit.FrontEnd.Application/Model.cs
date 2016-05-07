@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AnalysisToolkit.BackEnd.Helpers;
 
 namespace AnalysisToolkit.FrontEnd.Application
 {
@@ -14,6 +13,7 @@ namespace AnalysisToolkit.FrontEnd.Application
         public Model()
         {
             _sqlConnection = new System.Data.SqlClient.SqlConnection();
+
         }
        
 

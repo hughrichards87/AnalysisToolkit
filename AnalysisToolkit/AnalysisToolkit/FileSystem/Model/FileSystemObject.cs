@@ -4,9 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AnalysisToolkit.BackEnd.Helpers
+namespace AnalysisToolkit.FileSystem.Model
 {
-    public class Class1
+    class FileSystemObject
     {
+        private List<FileSystemObjectEvent> _events;
+        
+
     }
 }

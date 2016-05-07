@@ -55,7 +55,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="SqlServerAnalysis.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -98,21 +97,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AnalysisToolkit.BackEnd.Analysis\AnalysisToolkit.BackEnd.Analysis.csproj">
-      <Project>{abfa21ca-0195-47a4-bf98-df811008fb68}</Project>
-      <Name>AnalysisToolkit.BackEnd.Analysis</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\AnalysisToolkit.BackEnd.Helpers\AnalysisToolkit.BackEnd.Helpers.csproj">
-      <Project>{460a3863-9f94-41da-ac92-8527ac49cabf}</Project>
-      <Name>AnalysisToolkit.BackEnd.Helpers</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\AnalysisToolkit.BackEnd.IO\AnalysisToolkit.BackEnd.IO.csproj">
-      <Project>{f890b7e5-b6ff-4e65-b4c7-8f1d9a38f8d1}</Project>
-      <Name>AnalysisToolkit.BackEnd.IO</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\AnalysisToolkit.BackEnd.Process\AnalysisToolkit.BackEnd.Process.csproj">
-      <Project>{f0157e96-516f-448f-94b8-45f64c9e891b}</Project>
-      <Name>AnalysisToolkit.BackEnd.Process</Name>
+    <ProjectReference Include="..\AnalysisToolkit\AnalysisToolkit.csproj">
+      <Project>{923a21e8-ce9c-40b1-94e1-dc13567ab1db}</Project>
+      <Name>AnalysisToolkit</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

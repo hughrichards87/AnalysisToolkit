@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F0157E96-516F-448F-94B8-45F64C9E891B}</ProjectGuid>
+    <ProjectGuid>{46513A71-EFBB-40D5-8021-0928BBCE5F72}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AnalysisToolkit.BackEnd.Process</RootNamespace>
-    <AssemblyName>AnalysisToolkit.BackEnd.Process</AssemblyName>
+    <RootNamespace>AnalysisToolkit.SqlServer</RootNamespace>
+    <AssemblyName>AnalysisToolkit.SqlServer</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -40,22 +40,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\AnalysisToolkit.BackEnd.Analysis\AnalysisToolkit.BackEnd.Analysis.csproj">
-      <Project>{abfa21ca-0195-47a4-bf98-df811008fb68}</Project>
-      <Name>AnalysisToolkit.BackEnd.Analysis</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\AnalysisToolkit.BackEnd.Helpers\AnalysisToolkit.BackEnd.Helpers.csproj">
-      <Project>{460a3863-9f94-41da-ac92-8527ac49cabf}</Project>
-      <Name>AnalysisToolkit.BackEnd.Helpers</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\AnalysisToolkit.BackEnd.IO\AnalysisToolkit.BackEnd.IO.csproj">
-      <Project>{f890b7e5-b6ff-4e65-b4c7-8f1d9a38f8d1}</Project>
-      <Name>AnalysisToolkit.BackEnd.IO</Name>
-    </ProjectReference>
+    <Compile Include="SqlServerAnalysis.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

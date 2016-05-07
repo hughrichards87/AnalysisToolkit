@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AnalysisToolkit.BackEnd.Analysis.Histograms
+namespace AnalysisToolkit.Histograms
 {
     public class Histogram<TVal> : SortedDictionary<TVal, int>
     {

@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("AnalysisToolkit.BackEnd.IO")]
+[assembly: AssemblyTitle("AnalysisToolkit.SqlServer")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("AnalysisToolkit.BackEnd.IO")]
+[assembly: AssemblyProduct("AnalysisToolkit.SqlServer")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("f890b7e5-b6ff-4e65-b4c7-8f1d9a38f8d1")]
+[assembly: Guid("46513a71-efbb-40d5-8021-0928bbce5f72")]
 
 // Version information for an assembly consists of the following four values:
 //
