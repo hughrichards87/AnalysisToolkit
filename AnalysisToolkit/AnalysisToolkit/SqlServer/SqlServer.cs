@@ -20,63 +20,46 @@ namespace AnalysisToolkit.SqlServer
             _sqlConnection = sqlConnection;
             _sqlCommands = new List<SqlCommand>();
 
-           
+            
+        }
+
+        public void ImportMultipleCSVsIntoNewTables(List<> sourceToDestinationMappings)
+        {
+
+        }
+
+        public void ImportCSVIntoNewTable(string sourceFile, string destinationTable, string separator)
+        {
+
+            importCSVIntoNewTable(sourceFile, destinationTable, importDataColumnsFromFirstLine(sourceFile, separator), separator, 2);
         }
 
 
-        public void ImportCSV(string file, string destinationTable)
+        public void ImportCSVIntoNewTable(string sourceFile, string destinationTable, string headerFile, string separator)
         {
-            System.Diagnostics.Stopwatch elapsed = new System.Diagnostics.Stopwatch();
-            elapsed.Start();
-            int zero = 0;
-            int one = 1;
-            int batchSize = 100000;
-            Int64 rows = zero; 
 
-            using (
-                    SqlBulkCopy bulkcopy = new SqlBulkCopy(
-                                                            _sqlConnection.ConnectionString,
-                                                            System.Data.SqlClient.SqlBulkCopyOptions.TableLock
-                                                          )
-                                                        {
-                                                            DestinationTableName = destinationTable,
-                                                            BulkCopyTimeout = zero,
-                                                            BatchSize = batchSize
-                                                        }
-                )
-            {
+            ImportCSVIntoNewTable(sourceFile, destinationTable, headerFile, separator, separator);
+        }
 
-                using (System.IO.StreamReader reader = new System.IO.StreamReader(file))
-                {
-                    using (DataTable datatable = new DataTable())
-                    {
 
-                        datatable.Columns.Add("Column1", typeof(System.String));
+        public void ImportCSVIntoNewTable(string sourceFile, string destinationTable, string headerFile, string SourceFileSeparator, string headerFileSeparator)
+        {
+            ImportCSVIntoNewTable(sourceFile, destinationTable, importDataColumns(headerFile, headerFileSeparator), SourceFileSeparator);
+        }
 
-                        int batchSizeIndex = zero;
-                        while (!reader.EndOfStream)
-                        {
-                            datatable.Rows.Add(reader.ReadLine());
-                            batchSizeIndex += one;
-                            if (batchSizeIndex == batchSize)
-                            {
-                                bulkcopy.WriteToServer(datatable);
-                                datatable.Rows.Clear();
-                                batchSizeIndex = zero;
-                            }
-                            rows += one;
-                        }
-                        bulkcopy.WriteToServer(datatable);
-                        datatable.Rows.Clear();
-                    }
-                }
-            }
-            elapsed.Stop();
-            Console.WriteLine((rows + " records imported in " + elapsed.Elapsed.TotalSeconds + " seconds."));
-            Console.ReadLine();
-        
+        public void ImportCSVIntoNewTable(string sourceFile, string destinationTable, DataColumn[] columns, string separator)
+        {
+            importCSVIntoNewTable(sourceFile, destinationTable, columns, separator);
+        }
 
-    }
+        private void importCSVIntoNewTable(string sourceFile, string destinationTable, DataColumn[] columns, string separator)
+        {
+            importCSVIntoNewTable(sourceFile, destinationTable, columns, separator, 1);
+        }
+
+       
+
+
 
     }
 }
