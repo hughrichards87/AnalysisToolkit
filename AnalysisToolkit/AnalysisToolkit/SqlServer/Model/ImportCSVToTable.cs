@@ -1,7 +1,9 @@
-﻿using System;
+﻿using AnalysisToolkit.FileSystem;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -90,12 +92,6 @@ namespace AnalysisToolkit.SqlServer
             }
         }
 
-        //public enum ColumnDefintionsLocation
-        //{
-        //    FirstLineOfSourceFile,
-        //    SeparateHeaderFile
-        //}
-
 
         public class ColumnDefintionsInDataFile : ColumnDefintions
         {
@@ -125,6 +121,12 @@ namespace AnalysisToolkit.SqlServer
                 this._firstLine = firstLine;
                 this._numberOfRows = numberOfRows;
                 this._columnConcatenationRule = columnConcatenationRule;
+                
+            }
+
+            internal override void Load()
+            {
+                base.Load();
             }
 
         }
@@ -133,17 +135,37 @@ namespace AnalysisToolkit.SqlServer
         {
 
             private string _sourceFile;
-            private string _destinationTable;
             private string[] _separators;
             private int _firstLine = -1;
+
+            public ColumnsDefintionFile(string sourceFile, string[] separators)
+               :this(sourceFile, separators, 1)
+            {
+            }
+
+            public ColumnsDefintionFile(string sourceFile, string[] separators, int firstLine)
+            {
+                this._firstLine = firstLine;
+                this._separators = separators;
+                this._sourceFile = sourceFile;
+            }
+
+            internal override void Load()
+            {
+                base.Load();
+            }
 
         }
 
 
         public abstract class ColumnDefintions
         {
+            private List<DataColumn> _dataColumns;
 
-
+            internal virtual void Load()
+            {
+            
+            }
         }
 
         #endregion
@@ -151,13 +173,13 @@ namespace AnalysisToolkit.SqlServer
         #region constructors
 
         public ImportCSVToTable(string sourceFile, string seperator, ColumnDefintions columnDefintions, SqlConnection sqlConnection, string destinationTable)
-            : this(sourceFile, new string[] { seperator }, columnDefintionsLocation, sqlConnection, destinationTable)
+            : this(sourceFile, new string[] { seperator }, columnDefintions, sqlConnection, destinationTable)
         { }
 
 
         public ImportCSVToTable(string sourceFile, string[] seperators, ColumnDefintions columnDefintions, SqlConnection sqlConnection, string destinationTable)
         {
-            setColumns(columnDefintionsLocation, sourceFile, seperators);
+            setColumns(columnDefintions, sourceFile, seperators);
 
             this.SourceFile = sourceFile;
             this.Separators = seperators;
@@ -170,19 +192,19 @@ namespace AnalysisToolkit.SqlServer
         {
             this._columnsSource = headerFile;
             this._separators = seperators;
-            this._columnDefintionsLocation = columnDefintionsLocation;
+            this._columnDefintions = columnDefintions;
 
-            switch (columnDefintionsLocation)
-            {
-                case ColumnDefintionsLocation.FirstLineOfSourceFile:
-                    importDataColumnsFromFirstLine(headerFile, seperators);
-                    this.FirstLine = 2;
-                    break;
-                case ColumnDefintionsLocation.SeparateHeaderFile:
-                    importDataColumns(headerFile, seperators);
-                    this.FirstLine = 1;
-                    break;
-            }
+            //switch (columnDefintions)
+            //{
+            //    case ColumnDefintionsLocation.FirstLineOfSourceFile:
+            //        importDataColumnsFromFirstLine(headerFile, seperators);
+            //        this.FirstLine = 2;
+            //        break;
+            //    case ColumnDefintionsLocation.SeparateHeaderFile:
+            //        importDataColumns(headerFile, seperators);
+            //        this.FirstLine = 1;
+            //        break;
+            //}
 
             
         }
@@ -249,7 +271,6 @@ namespace AnalysisToolkit.SqlServer
             int batchSize = 100000;
             Int64 rows = zero;
             int batchSizeIndex = zero;
-            string[] line;
             int numberOfColumns = zero;
 
             using (
@@ -266,7 +287,7 @@ namespace AnalysisToolkit.SqlServer
                 )
             {
 
-                using (System.IO.StreamReader reader = new System.IO.StreamReader(sourceFile))
+                using (CSVReader reader = new CSVReader(new StreamReader(sourceFile), seperators))
                 {
                     //copy table structure in case they have added something in there already
                     using (DataTable datatable = this._dataTable.Copy())
@@ -278,13 +299,12 @@ namespace AnalysisToolkit.SqlServer
                         {
                             for (int i = zero; i < firstRow; i++)
                             {
-                                reader.ReadLine();
+                                reader.ReadRecord();
                             }
                         }
 
-                        while (!reader.EndOfStream)
+                        foreach(string[] line in reader.ReadRecord())
                         {
-                            line = reader.ReadLine().Split(seperators, StringSplitOptions.None);
                             datatable.Rows.Add(line);
                             batchSizeIndex += one;
                             if (batchSizeIndex == batchSize)

@@ -47,6 +47,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="FileSystem\Model\FileSystemObjectEvent.cs" />
+    <Compile Include="FileSystem\CSVReader.cs" />
     <Compile Include="FileSystem\WatcherCommon.cs" />
     <Compile Include="FileSystem\WatcherEx.cs" />
     <Compile Include="FileSystem\WatcherInfo.cs" />
