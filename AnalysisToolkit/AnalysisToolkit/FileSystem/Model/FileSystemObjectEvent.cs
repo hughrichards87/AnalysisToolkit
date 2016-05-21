@@ -8,6 +8,6 @@ namespace AnalysisToolkit.FileSystem.Model
 {
     class FileSystemObjectEvent
     {
-        private FileSystemObject _fileSystemObject
+        private FileSystemObject _fileSystemObject;
     }
 }

@@ -9,8 +9,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FrontEnd", "FrontEnd", "{CA
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "AnalysisToolkit.FrontEnd.SQL", "FrontEnd\SQLAnalysisToolkit\AnalysisToolkit.FrontEnd.SQL.sqlproj", "{61EE0465-BB0C-46DC-948E-C6EE18A04346}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnalysisToolkit.FrontEnd.Application", "AnalysisToolkit.FrontEnd.Application\AnalysisToolkit.FrontEnd.Application.csproj", "{A71A23D3-EF19-48BE-9B26-778A967E70B8}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnalysisToolkit", "AnalysisToolkit\AnalysisToolkit.csproj", "{923A21E8-CE9C-40B1-94E1-DC13567AB1DB}"
 EndProject
 Global
@@ -25,10 +23,6 @@ Global
 		{61EE0465-BB0C-46DC-948E-C6EE18A04346}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{61EE0465-BB0C-46DC-948E-C6EE18A04346}.Release|Any CPU.Build.0 = Release|Any CPU
 		{61EE0465-BB0C-46DC-948E-C6EE18A04346}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{A71A23D3-EF19-48BE-9B26-778A967E70B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A71A23D3-EF19-48BE-9B26-778A967E70B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A71A23D3-EF19-48BE-9B26-778A967E70B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A71A23D3-EF19-48BE-9B26-778A967E70B8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{923A21E8-CE9C-40B1-94E1-DC13567AB1DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{923A21E8-CE9C-40B1-94E1-DC13567AB1DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{923A21E8-CE9C-40B1-94E1-DC13567AB1DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -39,7 +33,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{61EE0465-BB0C-46DC-948E-C6EE18A04346} = {CAA5817A-58F6-4EF7-AA2E-82A1D79D9565}
-		{A71A23D3-EF19-48BE-9B26-778A967E70B8} = {CAA5817A-58F6-4EF7-AA2E-82A1D79D9565}
 		{923A21E8-CE9C-40B1-94E1-DC13567AB1DB} = {4D0570F8-A6D4-4922-B547-3E7730243D84}
 	EndGlobalSection
 EndGlobal

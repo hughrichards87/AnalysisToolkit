@@ -52,10 +52,12 @@
     <Compile Include="FileSystem\WatcherInfo.cs" />
     <Compile Include="Histograms\Histogram.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SqlServer\Columns.cs" />
-    <Compile Include="SqlServer\CSVToColumns.cs" />
-    <Compile Include="SqlServer\CSVToTable.cs" />
+    <Compile Include="SqlServer\Model\ImportCSVToTable.cs" />
+    <Compile Include="SqlServer\Model\ImportFilesToTables.cs" />
     <Compile Include="SqlServer\SqlServer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Model\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
