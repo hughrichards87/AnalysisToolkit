@@ -112,7 +112,7 @@ namespace AnalysisToolkit.SqlServer
             this._tablesToImport.AddRange(collection);
         }
 
-        public ImportFilesToTables(List<ImportCSVToTable> fileToTableMappings, string separator, ImportCSVToTable.ColumnDefintions columnDefintions, SqlConnection sqlConnection)
+        public ImportFilesToTables(List<ImportCSVToTable> fileToTableMappings, string separator, SqlConnection sqlConnection)
         {
             string[] separators = new string[] { separator };
             this._sqlConnection = sqlConnection;
@@ -123,7 +123,7 @@ namespace AnalysisToolkit.SqlServer
             for (int i = 0; i < count; i++)
             {
                 fileToTable = fileToTableMappings[i];
-                this._tablesToImport.Add(new ImportCSVToTable(fileToTable.SourceFile, separators, columnDefintions, sqlConnection, fileToTable.DestinationTable));
+                this._tablesToImport.Add(new ImportCSVToTable(fileToTable.CsvReader, sqlConnection, fileToTable.DestinationTable));
             }                     
         }
 

@@ -6,25 +6,62 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Data;
 
-namespace AnalysisToolkit.FileSystem
+namespace AnalysisToolkit.IO
 {
     public class CSVReader : IDisposable
     {
         private StreamReader _streamReader;
-        private DataTable _datatable;
 
         private string[] _recordSeparators;
         private string[] _fieldSeparators;
         private string[] _escapeCharacters;
         private string[] _textQualifiers;
 
+        private string[] _escapedRecordSeparators;
+        private string[] _escapedFieldSeparators;
+        private string[] _escapedTextQualifiers;
+        private int _bufferSize = 2000;
+        private int _firstLineOfData = -1;
+
+        public int FirstLineOfData
+        {
+            get
+            {
+                return _firstLineOfData;
+            }
+
+            set
+            {
+                _firstLineOfData = value;
+            }
+        }
+
+        public int BufferSize
+        {
+            get
+            {
+                return _bufferSize;
+            }
+
+            set
+            {
+                _bufferSize = value;
+            }
+        }
+
         #region constructors
-        public CSVReader(StreamReader streamReader, string[] recordSeparators)
-            : this(streamReader,  recordSeparators, null, null, null)
+        public CSVReader(StreamReader streamReader, string recordSeparator)
+            : this(streamReader, new string[] { recordSeparator} )
         {
 
         }
-        public CSVReader(StreamReader streamReader, string recordSeparator, string fieldSeparator, string escapeCharacter, string textQualifier)
+
+        public CSVReader(StreamReader streamReader, string[] recordSeparators)
+            : this(streamReader,recordSeparators, null, null, null)
+        {
+
+        }
+        public CSVReader(StreamReader streamReader,  string recordSeparator, string fieldSeparator, string escapeCharacter, string textQualifier)
             : this(streamReader, new string[] { recordSeparator}, new string[] { fieldSeparator }, new string[] { escapeCharacter }, new string[] { textQualifier })
         {
         }
@@ -41,6 +78,31 @@ namespace AnalysisToolkit.FileSystem
             this._fieldSeparators = fieldSeparators;
             this._escapeCharacters = escapeCharacters;
             this._textQualifiers = textQualifiers;
+
+            this._escapedFieldSeparators = combineSpecialCharacters(escapeCharacters, fieldSeparators);
+            this._escapedRecordSeparators = combineSpecialCharacters(escapeCharacters, recordSeparators);
+            this._escapedTextQualifiers = combineSpecialCharacters(escapeCharacters, textQualifiers);
+
+        }
+
+        private string[] combineSpecialCharacters(string[] specialCharacters1, string[] specialCharacters2)
+        {
+
+            List<string> combined = new List<string>();
+            int zero = 0;
+            int i = zero, j = zero;
+            int iLength = specialCharacters1 == null ? zero : specialCharacters1.Length;
+            int jLength = specialCharacters2 == null ? zero : specialCharacters2.Length;
+
+            for (; i < iLength; i++)
+            {
+                for (j = zero; j < jLength; j++)
+                {
+                    combined.Add(specialCharacters1[i] + specialCharacters2[j]);
+                }
+            }
+
+            return combined.ToArray();
         }
         #endregion
 
@@ -53,15 +115,15 @@ namespace AnalysisToolkit.FileSystem
             int zero = 0;
             int one = 1;
             int two = 2;
-            int bufferSize = 2000;
+            
             int recordsCount = zero;
             int i = zero;
-            char[] charBuffer = new char[bufferSize];
+            char[] charBuffer = new char[_bufferSize];
             string[] recordsBufferSplit;
             
             while (!_streamReader.EndOfStream) //Peek() >= zero)
             {
-                _streamReader.Read(charBuffer, zero, bufferSize);
+                _streamReader.Read(charBuffer, zero, _bufferSize);
                 buffer += charBuffer;
 
                 if (containsAtleastOneFullRecord(buffer))
@@ -88,9 +150,16 @@ namespace AnalysisToolkit.FileSystem
 
         private bool containsAtleastOneFullRecord(string buffer)
         {
-            bool found = false;
+            string[] potentialRecordSplit =  buffer.Split(_fieldSeparators, StringSplitOptions.None);
+            int zero = 0;
+            int i = zero;
+            int length = potentialRecordSplit.Length;
+            for (; i < length; i++)
+            {
 
-           
+            }
+
+            bool found = false;
             return found;
         }
 
@@ -98,8 +167,6 @@ namespace AnalysisToolkit.FileSystem
         {
             this._streamReader.Dispose();
             this._streamReader = null;
-            this._datatable.Dispose();
-            this._datatable = null;
 
             this._recordSeparators = null;
             this._fieldSeparators = null;
