@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Data;
+using AnalysisToolkit.Histograms;
 
 namespace AnalysisToolkit.IO
 {
@@ -12,14 +13,6 @@ namespace AnalysisToolkit.IO
     {
         private StreamReader _streamReader;
 
-        private string[] _recordSeparators;
-        private string[] _fieldSeparators;
-        private string[] _escapeCharacters;
-        private string[] _textQualifiers;
-
-        private string[] _escapedRecordSeparators;
-        private string[] _escapedFieldSeparators;
-        private string[] _escapedTextQualifiers;
         private int _bufferSize = 2000;
         private int _firstLineOfData = -1;
 
@@ -49,6 +42,266 @@ namespace AnalysisToolkit.IO
             }
         }
 
+        private SpecialStrings _specialStrings;
+
+        private class SpecialStringInstructions 
+        {
+            int _offset;
+            int _length;
+            bool _consume;
+            SpecialType _type;
+
+            public SpecialStringInstructions(SpecialChar specialChar)
+                :this(specialChar, 0)
+            {
+            }
+
+            public SpecialStringInstructions(SpecialChar specialChar, int offset)
+            {
+                this._length = specialChar.Depth;
+                this._type = specialChar.Type;
+                this._offset = offset;
+                this._consume = true;
+            }
+        }
+
+        private class SpecialStrings
+        {
+            private List<SpecialChar> _tree;
+            private List<SpecialChar> _currentBranches;
+
+            internal SpecialStrings()
+            {
+                _tree = new List<SpecialChar>();
+                _currentBranches = new List<SpecialChar>();
+            }
+
+            internal void AddRange(string[] values, SpecialType type)
+            {
+                int one = 1;
+                if (values != null && values.Length > one)
+                { 
+                    int zero = 0;
+                    int i = zero;
+                    int iLength = values.Length;
+                    char firstChar;
+                    SpecialType firstCharType;
+                    string v;
+                    string theRest;
+                    SpecialChar root;
+                    int vLength;
+                    SpecialType none = SpecialType.None;
+
+                    for (; i < iLength; i++)
+                    {
+                        v = values[i];
+                        vLength = v.Length;
+                        if (vLength > zero)
+                        {
+                            firstChar = v[zero];
+                            firstCharType = vLength > one ? none : type;
+                            root = _tree.Find(x => x.Value == firstChar);
+                            if (root == null)
+                            {
+                                root = new SpecialChar(firstChar, firstCharType, zero);
+                                _tree.Add(root);
+                            }
+
+                            if (vLength > one)
+                            {
+                                theRest = v.Substring(one);
+                                root.AddChildren(theRest, type);
+                            }
+                        }
+                    }
+                }
+            }
+
+            internal List<SpecialStringInstructions> CheckForSpecialType(char c)
+            {
+                int length = _currentBranches.Count;
+                int one = 1;
+                List<SpecialStringInstructions> instructions = new List<SpecialStringInstructions>();
+                if (length > one)
+                {
+                    List<SpecialChar> newBranches = new List<SpecialChar>();
+                    SpecialChar child;
+                    SpecialChar branch;
+                    for (int i = 0; i < length; i++)
+                    {
+                        branch = _currentBranches[i];
+                        child = branch.CheckChildrenForSpecialType(c);
+                        if (child != null)
+                        {
+                            newBranches.Add(child);
+                        }
+                        else
+                        {
+                            instructions.Add(new SpecialStringInstructions(branch, one));
+                        }
+                    }
+                    _currentBranches = newBranches;
+                }
+
+
+                SpecialChar root = _tree.Find(x => x.Value == c);
+                if (root != null)
+                {
+                    if (root.HasChildren)
+                    {
+                        _currentBranches.Add(root);
+                    }
+                    else
+                    {
+                        instructions.Add(new SpecialStringInstructions(root));
+                    }
+
+                }
+                return instructions;
+            }
+        }
+
+        internal enum SpecialType
+        {
+            RecordSeparator,
+            FieldSeparator,
+            EscapeCharacter,
+            TextQualifier,
+            None
+        }
+
+        private class SpecialChar
+        {
+            private char _value;
+            private SpecialType _type;
+            private int _depth;
+            private List<SpecialChar> _children;
+            private SpecialChar _parent;
+
+            internal char Value
+            {
+                get
+                {
+                    return _value;
+                }
+
+                set
+                {
+                    _value = value;
+                }
+            }
+
+            internal SpecialType Type
+            {
+                get
+                {
+                    return _type;
+                }
+
+                set
+                {
+                    _type = value;
+                }
+            }
+
+            internal int Depth
+            {
+                get
+                {
+                    return _depth;
+                }
+
+                set
+                {
+                    _depth = value;
+                }
+            }
+
+            internal List<SpecialChar> Children
+            {
+                get
+                {
+                    return _children;
+                }
+
+                set
+                {
+                    _children = value;
+                }
+            }
+
+            internal SpecialChar Parent
+            {
+                get
+                {
+                    return _parent;
+                }
+
+                set
+                {
+                    _parent = value;
+                }
+            }
+
+            public bool HasChildren {
+                get
+                {
+                    return _children != null; 
+                }
+            }
+
+            internal SpecialChar(char value, SpecialType type, int depth)
+                : this(null, value, type)
+            {
+                this._depth = depth;
+            }
+
+            internal SpecialChar(SpecialChar parent, char value, SpecialType type)
+            {
+                this._value = value;
+                this._type = type;
+                this._parent = parent;
+                if (parent != null)
+                {
+                    this._depth = parent.Depth + 1;
+                }
+
+            }
+
+            internal void AddChildren(string value, SpecialType type)
+            {
+                int length = value.Length;
+                int one = 1;
+                if (length >= one)
+                {
+                    if (_children == null)
+                    {
+                        _children = new List<SpecialChar>();
+                    }
+                    char firstChar = value[0];
+                    SpecialType firstCharType = value.Length > one ? SpecialType.None : type;
+                    SpecialChar child = _children.Find(x => x.Value == firstChar);
+                    if (child == null)
+                    {
+                        child = new SpecialChar(this, firstChar, firstCharType);
+                        _children.Add(child);
+                    }
+
+                    if (length > one)
+                    {
+                        child.AddChildren(value.Substring(one), type);
+                    }
+                }
+            }
+
+            internal SpecialChar CheckChildrenForSpecialType(char c)
+            {
+                return _children.Find(x => x.Value == c);
+            }
+ 
+        }
+
+
         #region constructors
         public CSVReader(StreamReader streamReader, string recordSeparator)
             : this(streamReader, new string[] { recordSeparator} )
@@ -74,132 +327,40 @@ namespace AnalysisToolkit.IO
 
         private void setDefaultSpecialCharacters(string[] recordSeparators, string[] fieldSeparators, string[] escapeCharacters, string[] textQualifiers)
         {
-            this._recordSeparators = recordSeparators;
-            this._fieldSeparators = fieldSeparators;
-            this._escapeCharacters = escapeCharacters;
-            this._textQualifiers = textQualifiers;
+            _specialStrings = new SpecialStrings();
 
-            this._escapedFieldSeparators = combineSpecialCharacters(escapeCharacters, fieldSeparators);
-            this._escapedRecordSeparators = combineSpecialCharacters(escapeCharacters, recordSeparators);
-            this._escapedTextQualifiers = combineSpecialCharacters(escapeCharacters, textQualifiers);
+            this._specialStrings.AddRange(recordSeparators, SpecialType.RecordSeparator);
+            this._specialStrings.AddRange(fieldSeparators, SpecialType.FieldSeparator);
+            this._specialStrings.AddRange(escapeCharacters, SpecialType.EscapeCharacter);
+            this._specialStrings.AddRange(textQualifiers, SpecialType.TextQualifier);
 
         }
 
-        private string[] combineSpecialCharacters(string[] specialCharacters1, string[] specialCharacters2)
-        {
-
-            List<string> combined = new List<string>();
-            int zero = 0;
-            int i = zero, j = zero;
-            int iLength = specialCharacters1 == null ? zero : specialCharacters1.Length;
-            int jLength = specialCharacters2 == null ? zero : specialCharacters2.Length;
-
-            for (; i < iLength; i++)
-            {
-                for (j = zero; j < jLength; j++)
-                {
-                    combined.Add(specialCharacters1[i] + specialCharacters2[j]);
-                }
-            }
-
-            return combined.ToArray();
-        }
+        
         #endregion
 
 
         public IEnumerable<string[]> ReadRecord()
         {
-            string empty = "";
-            string buffer = empty;
-            string[] record;
-            int zero = 0;
-            int one = 1;
-            int two = 2;
-            
-            int recordsCount = zero;
-            int i = zero;
-            char[] charBuffer = new char[_bufferSize];
-            string[] recordsBufferSplit;
-            
+            List<SpecialStringInstructions> instructions;
+            char c;
             while (!_streamReader.EndOfStream) //Peek() >= zero)
             {
-                _streamReader.Read(charBuffer, zero, _bufferSize);
-                buffer += charBuffer;
+                c = (char)_streamReader.Read();
+                instructions = _specialStrings.CheckForSpecialType(c);
 
-                if (containsAtleastOneFullRecord(buffer))
-                {
-                    //found so split in to records
-                    recordsBufferSplit = buffer.Split();
-                    recordsCount =  recordsBufferSplit.Length - two;
-                    for (i = zero; i < recordsCount; i++)
-                    {
-                        //split in to fields
-                        record = recordsBufferSplit[i].Split();
-                        yield return record;
-                    }
-
-                    //put the left over in the buffer and carry on
-                    buffer = recordsBufferSplit[recordsCount + one];
-                    continue;
-                }
             }
 
             //last of the file... lets see if its a record by splitting in to fields
-            yield return buffer.Split();
+            yield return null;
         }
 
-        private bool containsAtleastOneFullRecord(string buffer)
-        {
-            string[] potentialRecordSplit =  buffer.Split(_fieldSeparators, StringSplitOptions.None);
-            int zero = 0;
-            int i = zero;
-            int length = potentialRecordSplit.Length;
-            for (; i < length; i++)
-            {
-
-            }
-
-            bool found = false;
-            return found;
-        }
-
-        public void Dispose()
+         public void Dispose()
         {
             this._streamReader.Dispose();
             this._streamReader = null;
 
-            this._recordSeparators = null;
-            this._fieldSeparators = null;
-            this._escapeCharacters = null;
-            this._textQualifiers = null;
+
         }
-
-
-        //public static List<int> AllIndexesOf(this string str, string value)
-        //{
-        //    if (String.IsNullOrEmpty(value))
-        //        throw new ArgumentException("the string to find may not be empty", "value");
-        //    List<int> indexes = new List<int>();
-        //    for (int index = 0; ; index += value.Length)
-        //    {
-        //        index = str.IndexOf(value, index);
-        //        if (index == -1)
-        //            return indexes;
-        //        indexes.Add(index);
-        //    }
-        //}
-
-        //public static IEnumerable<int> AllIndexesOf(this string str, string value)
-        //{
-        //    if (String.IsNullOrEmpty(value))
-        //        throw new ArgumentException("the string to find may not be empty", "value");
-        //    for (int index = 0; ; index += value.Length)
-        //    {
-        //        index = str.IndexOf(value, index);
-        //        if (index == -1)
-        //            break;
-        //        yield return index;
-        //    }
-        //}
     }
 }

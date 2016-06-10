@@ -25,5 +25,35 @@ namespace AnalysisToolkit.Histograms
 
         }
 
+        public static Histogram<string> Create(string s, string[] values)
+        {
+            int zero = 0;
+            int i = zero, j;
+            int iLength = values.Length;
+            int jLength = s.Length;
+            int count = zero;
+            string value;
+            int vLength;
+            int vjLength;
+            Histogram<string> hist = new Histogram<string>();
+            for (; i < iLength; i++)
+            {
+                value = values[i];
+                vLength = value.Length;
+                vjLength = jLength - vLength;
+                count = zero;
+                for (j = zero; j < vjLength; j++)
+                {
+                    if (s.Substring(j, vLength) == value)
+                    {
+                        count++;
+                    }
+                }
+                hist.Add(value, count);
+            }
+            return hist;
+        }
+
+
     }
 }

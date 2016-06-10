@@ -81,7 +81,7 @@ namespace AnalysisToolkit.SqlServer
 
         public void Import()
         {
-            importToNewTable(this.SourceFile, this.FirstLine, this.Separators, this.SqlConnection, this.DestinationTable);
+            //importToNewTable(this.SourceFile, this.FirstLine, this.Separators, this.SqlConnection, this.DestinationTable);
         }
  
         /// <summary>
@@ -95,7 +95,7 @@ namespace AnalysisToolkit.SqlServer
             elapsed.Start();
 
             int zero = 0;
-            int one = 1;
+            //int one = 1;
             int batchSize = 100000;
             Int64 rows = zero;
             int batchSizeIndex = zero;
@@ -116,35 +116,35 @@ namespace AnalysisToolkit.SqlServer
             {
 
 
-                //copy table structure in case they have added something in there already
-                using (DataTable datatable = this._dataTable.Copy())
-                {
-                    batchSizeIndex = datatable.Rows.Count;
-                    numberOfColumns = datatable.Columns.Count;
+                ////copy table structure in case they have added something in there already
+                //using (DataTable datatable = this._dataTable.Copy())
+                //{
+                //    batchSizeIndex = datatable.Rows.Count;
+                //    numberOfColumns = datatable.Columns.Count;
 
-                    foreach(string[] line in csvReader.ReadRecord())
-                    {
-                        datatable.Rows.Add(line);
-                        batchSizeIndex += one;
-                        if (batchSizeIndex == batchSize)
-                        {
-                            bulkcopy.WriteToServer(datatable);
-                            datatable.Rows.Clear();
-                            batchSizeIndex = zero;
-                        }
-                        rows += one;
-                    }
-                    bulkcopy.WriteToServer(datatable);
-                    datatable.Rows.Clear();
-                }
+                //    foreach(string[] line in csvReader.ReadRecord())
+                //    {
+                //        datatable.Rows.Add(line);
+                //        batchSizeIndex += one;
+                //        if (batchSizeIndex == batchSize)
+                //        {
+                //            bulkcopy.WriteToServer(datatable);
+                //            datatable.Rows.Clear();
+                //            batchSizeIndex = zero;
+                //        }
+                //        rows += one;
+                //    }
+                //    bulkcopy.WriteToServer(datatable);
+                //    datatable.Rows.Clear();
+                //}
                
 
-                string sqlQuery = @"SELECT * FROM " + destinationTable;
-                using (SqlCommand cmd = new SqlCommand(sqlQuery, sqlConnection))
-                {
-                    SqlDataAdapter da = new SqlDataAdapter(cmd);
-                    da.Fill(this._dataTable);
-                }
+                //string sqlQuery = @"SELECT * FROM " + destinationTable;
+                //using (SqlCommand cmd = new SqlCommand(sqlQuery, sqlConnection))
+                //{
+                //    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                //    da.Fill(this._dataTable);
+                //}
                
             }
 
