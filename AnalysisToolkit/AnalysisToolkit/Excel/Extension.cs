@@ -19,11 +19,11 @@ namespace AnalysisToolkit.Excel
         public static bool ContainsData(this Range range)
         {
             long one = 1;
-            if (range.CountLarge == 1 && range.Cells.Value2 != null)
+            if (range.CountLarge == one && range.Cells.Value2 != null)
             {
                 return true;
             }
-            else if (range.CountLarge == 1 && range.Cells.Value2 == null)
+            else if (range.CountLarge == one && range.Cells.Value2 == null)
             {
                 return false;
             }
