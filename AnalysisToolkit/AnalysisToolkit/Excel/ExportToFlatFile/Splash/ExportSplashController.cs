@@ -10,6 +10,8 @@ namespace AnalysisToolkit.Excel.ExportToFlatFile.Splash
         private Splash _userControl;
         private Microsoft.Office.Interop.Excel.Application application;
         private bool _cancelPressed = false;
+        private int dispose = 15;
+        private int seconds = 0;
 
         public ExportSplashController(Microsoft.Office.Interop.Excel.Application application)
         {
@@ -46,8 +48,7 @@ namespace AnalysisToolkit.Excel.ExportToFlatFile.Splash
                 _userControl.progressBar1.Dispatcher.Invoke(new UpdateProgressCallback(updateProgress), new object[] { 100 });
             }
         }
-        private int dispose = 20;
-        private int seconds = 0;
+
         private void Timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
             if (_userControl != null)

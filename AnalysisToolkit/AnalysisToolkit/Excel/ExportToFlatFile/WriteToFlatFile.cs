@@ -5,56 +5,82 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace AnalysisToolkit.Excel.ExportToFlatFile
 {
     class WriteToFlatFile
     {
 
-        internal delegate bool OnUpdateHandler(long currentRow, long overallRows);
+        private Range[] _ranges;
+        private string _fileName;
+        private Encoding _encoding;
+        private StreamWriter _streamWriter;
+        internal delegate bool OnUpdateHandler(long currentRow);
         internal event OnUpdateHandler OnUpdate;
 
-        private StreamWriter _streamWriter;
-        private Range[] _ranges;
-        private string _separator;
-        private string _escapeCharacter;
-        private string _endOfLine;
-        private ValueType _valueType;
-
-        internal WriteToFlatFile(Range range, string fileName, Encoding encoding, string separator, string escapeCharacter, string endOfLine, ValueType valueType)
-            :this(new Range[] { range }, fileName, encoding, separator, escapeCharacter, endOfLine, valueType)
+        public long OverallRows
         {
+            get;
+            set;
         }
 
-        internal WriteToFlatFile(Range[] ranges, string fileName, Encoding encoding, string separator, string escapeCharacter, string endOfLine, ValueType valueType)
+        internal WriteToFlatFile(Range range, string fileName, Encoding encoding)
+            : this(new Range[] { range }, fileName, encoding)
         {
-            _streamWriter = new StreamWriter(new FileStream(fileName, FileMode.Create), encoding);
 
-            _ranges = ranges;
-            _separator = separator;
-            _escapeCharacter = escapeCharacter;
-            _endOfLine = endOfLine;
-            _valueType = valueType;
         }
 
-        internal void Write()
+        internal WriteToFlatFile(Range[] ranges, string fileName, Encoding encoding)
         {
+            this._ranges = ranges;
+            this._fileName = fileName;
+            this._encoding = encoding;
+            this.OverallRows = ranges.Select(o => o.Rows.CountLarge).Aggregate((current, next) => current + next);
+
+        }
+
+        internal void Write(string separator, string escapeCharacter, string endOfLine, ValueType valueType)
+        {
+        //    Write(separator, escapeCharacter, endOfLine, valueType, false);
+        //}
+
+        //internal void Write(string separator, string escapeCharacter, string endOfLine, ValueType valueType, bool showGui)
+        //{
             if (_ranges != null)
             {
-                if (_ranges.Length == 1 && _ranges[0].CountLarge == 1)
+                DialogResult result = DialogResult.Yes;
+                FileMode fileMode = FileMode.Create;
+
+                //if (showGui && File.Exists(_fileName))
+                //{
+                //    result = MessageBox.Show(
+                //                            _fileName.Substring(_fileName.LastIndexOf('\\') + 1) + " already exists.\nDo you want to replace it?",
+                //                            "Confirm Save As",
+                //                            MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1
+                //                            );
+                //}
+
+                if (result == DialogResult.Yes)
                 {
-                    string val = _valueType == ValueType.Value ? _ranges[0].Cells.Value : _ranges[0].Cells.Value2;
-                    _streamWriter.WriteLine(_escapeCharacter + val + _escapeCharacter);
-                    _streamWriter.Flush();
-                }
-                else
-                {
-                    writeValues(_ranges, _streamWriter, _separator, _escapeCharacter, _endOfLine, _valueType);
+                    StreamWriter streamWriter = new StreamWriter(new FileStream(_fileName, fileMode), _encoding);
+
+
+                    if (_ranges.Length == 1 && _ranges[0].CountLarge == 1)
+                    {
+                        string val = valueType == ValueType.Value ? _ranges[0].Cells.Value : _ranges[0].Cells.Value2;
+                        _streamWriter.WriteLine(escapeCharacter + val + escapeCharacter);
+                        _streamWriter.Flush();
+                    }
+                    else
+                    {
+                        writeValues(_ranges, streamWriter, separator, escapeCharacter, endOfLine, valueType);
+                    }
+
+                    streamWriter.Close();
                 }
             }
-            _streamWriter.Close();
         }
-
 
         private void writeValues(Range[] ranges, StreamWriter streamWriter, string separator, string escapeCharacter, string endOfLine, ValueType valueType)
         {
@@ -65,7 +91,6 @@ namespace AnalysisToolkit.Excel.ExportToFlatFile
                  i = one, j = one,
                  length0, length1, length2 = ranges.Length;
 
-                long overalRows = ranges.Select(o => o.Rows.CountLarge).Aggregate((current, next) => current + next);
                 long overalCurrentIndex = zero;
                 bool cancelled = false;
 
@@ -114,7 +139,7 @@ namespace AnalysisToolkit.Excel.ExportToFlatFile
                                 streamWriter.Flush();
                                 if (OnUpdate != null)
                                 {
-                                    if (OnUpdate(overalCurrentIndex, overalRows))
+                                    if (OnUpdate(overalCurrentIndex))
                                     {// if true, cancelled
                                         cancelled = true;
                                         break;
@@ -164,7 +189,7 @@ namespace AnalysisToolkit.Excel.ExportToFlatFile
                                 streamWriter.Flush();
                                 if (OnUpdate != null)
                                 {
-                                    if (OnUpdate(overalCurrentIndex, overalRows))
+                                    if (OnUpdate(overalCurrentIndex))
                                     {// if true, cancelled
                                         cancelled = true;
                                         break;
@@ -178,7 +203,17 @@ namespace AnalysisToolkit.Excel.ExportToFlatFile
                         }
                     }
                 }
+
+                streamWriter.Flush();
+                if (OnUpdate != null)
+                {
+                    if (OnUpdate(overalCurrentIndex))
+                    {// if true, cancelled
+                        cancelled = true;
+                    }
+                }
             }
         }
+
     }
 }

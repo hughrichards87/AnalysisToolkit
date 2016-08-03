@@ -12,92 +12,134 @@ namespace AnalysisToolkit.Excel.ExportToFlatFile
     internal class ExportToFlatFile
     {
         internal ExportSplashController splash = null;
-        private Range[] ranges;
-        private string fileName;
+        private Microsoft.Office.Interop.Excel.Application _application;
+        private List<WriteToFlatFile> _rangeExportPackages;
+        private long _overallRows;
         private string separator;
         private string escapeCharacter;
-        private Encoding encoding;
+        private string endOfLine;
         private ValueType valueType;
 
         public ExportToFlatFile(Range[] ranges, string fileName, string separator, string escapeCharacter, Encoding encoding, ValueType valueType)
+            :this(ranges, fileName, "", separator, escapeCharacter, encoding, valueType)
         {
-            this.ranges = ranges;
-            this.fileName = fileName;
+        }
+
+        public ExportToFlatFile(Range[] ranges, string fileNameFormat, string sheetNameReplacement, string separator, string escapeCharacter, Encoding encoding, ValueType valueType)
+        {
+            create(ranges, fileNameFormat, sheetNameReplacement, separator, escapeCharacter, encoding, valueType);
+
+        }
+
+        public ExportToFlatFile(Workbook workbook, string fileNameFormat, string sheetNameReplacement, string separator, string escapeCharacter, Encoding encoding, ValueType valueType)
+        {
+            List<Range> ranges = new List<Range>();
+            foreach ( Worksheet sheet in workbook.Sheets)
+            {
+                ranges.Add(sheet.UsedRange);
+            }
+             
+            create(ranges.ToArray(), fileNameFormat, sheetNameReplacement, separator, escapeCharacter, encoding, valueType);
+        }
+
+        private void create(Range[] ranges, string fileNameFormat, string sheetNameReplacement, string separator, string escapeCharacter, Encoding encoding, ValueType valueType)
+        {
+
+            this._application = ranges[0].Application;
+            this._rangeExportPackages = packageRangesForExport(ranges, fileNameFormat, sheetNameReplacement, encoding);
+
             this.separator = separator;
             this.escapeCharacter = escapeCharacter;
-            this.encoding = encoding;
             this.valueType = valueType;
+            this.endOfLine = "\r\n";
         }
 
-        public void Export(string fileName, Range range, string separator, string escapeCharacter, Encoding encoding, ValueType valueType)
+        private List<WriteToFlatFile> packageRangesForExport(Range[] ranges, string fileNameFormat, string sheetNameReplacement, Encoding encoding)
         {
+            List<WriteToFlatFile> rangeExportPackages = new List<WriteToFlatFile>();
+            var queryGrouped =
+                            from range in ranges
+                            group range by range.Worksheet
+                            into sheets
+                            orderby sheets.Key.Index
+                            select sheets;
 
+            List<Range> rangeList;
+            int one = 1;
+            int i = one;
+            string empty = "";
+            string sheetFileName;
 
-        }
-
-        public void SaveAs(Range range, string separator, string escapeCharacter, Encoding encoding, ValueType valueType)
-        {
-            string workbookName = range.Worksheet.Application.ActiveWorkbook.Name;
-            if (workbookName.Contains("."))
+            foreach (var sheet in queryGrouped)
             {
-                workbookName = workbookName.Substring(0, workbookName.LastIndexOf('.'));
+                rangeList = new List<Range>();
+                foreach (var rangesPerSheet in sheet)
+                {
+                    rangeList.Add(rangesPerSheet);
+                }
+
+                if (sheetNameReplacement != empty &&  fileNameFormat.Contains(sheetNameReplacement))
+                {
+                    sheetFileName = fileNameFormat.Replace(sheetNameReplacement, sheet.Key.Name);
+                }
+                else
+                {
+                    sheetFileName = fileNameFormat + ( i > one ?  "_" + i.ToString() : empty);
+                }
+
+                rangeExportPackages.Add(new WriteToFlatFile(rangeList.ToArray(), sheetFileName, encoding));
+
+                i++;
             }
 
-            SaveAs(workbookName + '_' + range.Worksheet.Name + ".txt", range, separator, escapeCharacter, encoding, valueType);
+            return rangeExportPackages;
+
         }
 
-        public void SaveAs(Range[] ranges, string separator, string escapeCharacter, Encoding encoding, ValueType valueType)
+        internal void Export()
         {
+            Export(false);
         }
 
-        public void SaveAs(string fileName, Range range, string separator, string escapeCharacter, Encoding encoding, ValueType valueType)
+        internal void Export(bool showGui)
         {
-            SaveFileDialog saveFileDialog = ShowSaveFileDialog(fileName);
-            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            if (_rangeExportPackages != null)
             {
-                fileName = saveFileDialog.FileName.ToString();
-                Export(fileName, range, separator, escapeCharacter, encoding, valueType);
+
+                escapeCharacter = escapeCharacter.Trim();
+                separator = separator.Trim();
+
+                if (showGui)
+                {
+                    splash = new ExportSplashController(this._application);
+                }
+
+               _overallRows = _rangeExportPackages.Select(o => o.OverallRows).Aggregate((current, next) => current + next);
+
+
+                foreach (WriteToFlatFile rangeExport in _rangeExportPackages)
+                {
+                    rangeExport.OnUpdate -= Writer_OnUpdate;
+                    rangeExport.OnUpdate += Writer_OnUpdate;
+                    rangeExport.Write(separator, escapeCharacter, endOfLine, valueType); //, showGui);
+                    rangeExport.OnUpdate -= Writer_OnUpdate;
+
+                }
+
+                if (splash != null)
+                {
+                    splash.Finish();
+                    splash = null;
+                }
             }
         }
+     
 
-        internal void Export(bool showProgressBar)
+        private bool Writer_OnUpdate(long currentRow)
         {
-            escapeCharacter = escapeCharacter.Trim();
-            separator = separator.Trim();
-
-            WriteToFlatFile writer = new WriteToFlatFile(ranges, fileName, encoding, separator, escapeCharacter, "\r\n", valueType);
-
-            if (showProgressBar)
-            {
-                splash = new ExportSplashController(ranges[0].Application);
-                writer.OnUpdate -= Writer_OnUpdate;
-                writer.OnUpdate += Writer_OnUpdate;
-            }
-
-            writer.Write();
-            if (splash != null)
-            {
-                splash.Finish();
-                splash = null;
-            }
+            return splash.Update(currentRow, _overallRows);
         }
 
-        private bool Writer_OnUpdate(long currentRow, long overallRows)
-        {
-            return splash.Update(currentRow, overallRows);
-        }
-
-        public SaveFileDialog ShowSaveFileDialog(string fileName)
-        {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "Text Files (*.txt)|*.txt|Comma Separated Value Files (*.csv)|*.csv|All Files (*.*)|*.*";
-            saveFileDialog.FilterIndex = 0;
-            saveFileDialog.RestoreDirectory = true;
-            saveFileDialog.OverwritePrompt = true;
-            saveFileDialog.FileName = fileName;
-            saveFileDialog.Title = "Export to Flat File";
-            return saveFileDialog;
-        }
 
     }
 }
