@@ -102,7 +102,59 @@ namespace AnalysisToolkit.Excel.ExportToFlatFile
                 Range range, r;
                 object val = null;
 
-                if (valueType == ValueType.Value)
+                if (valueType == ValueType.Text)
+                {
+                    for (long k = zero; k < length2; k++)
+                    {
+                        range = ranges[k];
+                        length0 = range.Rows.CountLarge;
+                        length1 = range.Columns.CountLarge;
+
+
+                        for (i = one; i <= length0; i++)
+                        {
+                            for (j = one; j <= length1; j++)
+                            {
+                                r = ((Range)range.Cells[i, j]);
+                                val = ((object)r.Text) ?? blank;
+                                if (j < length1)
+                                {
+                                    format = formatvalue;
+                                }
+                                else if (i < length0)
+                                {
+                                    format = formatline;
+                                }
+                                else
+                                {
+                                    format = formatend;
+                                }
+                                streamWriter.Write(string.Format(format, escapeCharacter, val.ToString(), separator));
+
+                            }
+
+                            overalCurrentIndex++;
+                            if (overalCurrentIndex % updateInterval == zero)
+                            {
+                                streamWriter.Flush();
+                                if (OnUpdate != null)
+                                {
+                                    if (OnUpdate(overalCurrentIndex))
+                                    {// if true, cancelled
+                                        cancelled = true;
+                                        break;
+                                    }
+                                }
+                            }
+
+                        }
+                        if (cancelled)
+                        {
+                            break;
+                        }
+                    }
+                }
+                else if (valueType == ValueType.Value)
                 {
                     for (long k = zero; k < length2; k++)
                     {

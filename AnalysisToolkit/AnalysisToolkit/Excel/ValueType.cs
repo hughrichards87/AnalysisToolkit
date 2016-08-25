@@ -8,6 +8,7 @@ namespace AnalysisToolkit.Excel
 {
     public enum ValueType
     {
+        Text,
         Value,
         Value2
     }
